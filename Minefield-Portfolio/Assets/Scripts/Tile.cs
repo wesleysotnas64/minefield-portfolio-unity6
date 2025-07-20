@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Tile : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class Tile : MonoBehaviour
     public bool revealed;
     public bool visited;
     public bool hasMine;
-    public bool marked;
+    public bool markedWithFlag;
     [Range(0, 100)]
     public float probabilityBomb;
     private SpriteRenderer spriteRenderer;
@@ -18,18 +17,7 @@ public class Tile : MonoBehaviour
 
     void Start()
     {
-        revealed = false;
-        visited = false;
-        hasMine = false;
-        marked = false;
-
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = sprites[9];
-
-        field = GameObject.Find("Field").GetComponent<Field>();
-
-        DrawBomb();
+        
     }
 
     private void DrawBomb()
@@ -41,22 +29,80 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void InitSetUp()
+    {
+        revealed = false;
+        visited = false;
+        hasMine = false;
+        markedWithFlag = false;
+
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprites[9];
+
+        field = GameObject.Find("Field").GetComponent<Field>();
+
+        DrawBomb();
+    }
+
+    public void ResetTile(int difficulty = 1)
+    {
+        revealed = false;
+        visited = false;
+        hasMine = false;
+        markedWithFlag = false;
+
+        spriteRenderer.sprite = sprites[9];
+
+        switch (difficulty)
+        {
+            case 1:
+                probabilityBomb = 10.0f;
+                break;
+
+            case 2:
+                probabilityBomb = 25.0f;
+                break;
+
+            case 3:
+                probabilityBomb = 65.0f;
+                break;
+
+            default:
+                break;
+        }
+
+        DrawBomb();
+    }
+
     public void Show(int adjacentQuantity)
     {
         spriteRenderer.sprite = sprites[adjacentQuantity];
         revealed = true;
     }
 
-    private void Mark()
+    private void MarkWithFlag()
     {
         if (!revealed)
         {
+            markedWithFlag = true;
             spriteRenderer.sprite = sprites[10];
         }
     }
 
+    private void RemoveFlag()
+    {
+        if (!revealed)
+        {
+            markedWithFlag = false;
+            spriteRenderer.sprite = sprites[9];
+        }
+    }
+
     void OnMouseDown()
-    { 
+    {
+        if (!GetComponent<BoxCollider2D>().enabled) return;
+
         if (!field.isFlagSelect)
         {
             Debug.Log($"Line: {line} | Column: {column} | HasMine: {hasMine}");
@@ -64,21 +110,23 @@ public class Tile : MonoBehaviour
             {
                 if (hasMine)
                 {
-                    // Revela a bomba
-                    // Chama o campo para revelar todas as bombas e determinar fim de jogo.
+                    StartCoroutine(field.RevealAllBombsEnum());
                 }
                 else
                 {
                     revealed = true;
                     field.SetAllTilesUnvisited();
                     field.RevealTilesUponClick(line, column);
-                    // Show(field.VerifyAdjascenceFrom(line, column));
                 }
             }
         }
         else
         {
-            Mark();
+            if (!revealed)
+            {
+                if (markedWithFlag) RemoveFlag();
+                else MarkWithFlag();
+            }
         }
     }
 

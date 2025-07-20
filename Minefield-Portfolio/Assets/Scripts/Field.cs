@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class Field : MonoBehaviour
 {
     public bool isFlagSelect;
@@ -9,15 +9,12 @@ public class Field : MonoBehaviour
     public float gapTiles;
     private Tile[,] tiles;
     public GameObject tileGameObject;
+    public GameObject mineGameObject;
 
     void Start()
     {
-        tiles = new Tile[height, width];
-        InitAllTiles();
-
-        float newPositionX = gapTiles * ((float)width - 1) / 2;
-        float newPositionY = gapTiles * ((float)height - 1) / 2;
-        GameObject.Find("Main Camera").transform.position = new(newPositionX, -newPositionY, -10);
+        InitSetUp();
+        ResetGame(1);
     }
 
     private void InitAllTiles()
@@ -34,6 +31,8 @@ public class Field : MonoBehaviour
                 tiles[line, column] = tileInstance.GetComponent<Tile>();
                 tiles[line, column].line = line;
                 tiles[line, column].column = column;
+
+                tiles[line, column].InitSetUp();
             }
         }
     }
@@ -60,6 +59,34 @@ public class Field : MonoBehaviour
         }
     }
 
+    public IEnumerator RevealAllBombsEnum()
+    {
+        DisableAllBoxColliders();
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                if (tiles[line, column].hasMine)
+                {
+                    yield return new WaitForSeconds(0.05f);
+                    GameObject mineInstance = Instantiate(mineGameObject);
+                    mineInstance.transform.position = tiles[line, column].transform.position;
+                }
+                
+            }
+        }
+    }
+
+    public void DestroyAllMines()
+    {
+        GameObject[] mines = GameObject.FindGameObjectsWithTag("Mine");
+
+        foreach (GameObject mine in mines)
+        {
+            Destroy(mine);
+        }
+    }
+
     public void SetAllTilesUnvisited()
     {
         for (int line = 0; line < height; line++)
@@ -67,6 +94,50 @@ public class Field : MonoBehaviour
             for (int column = 0; column < width; column++)
             {
                 tiles[line, column].visited = false;
+            }
+        }
+    }
+
+    public void InitSetUp()
+    {
+        tiles = new Tile[height, width];
+        InitAllTiles();
+
+        float newPositionX = gapTiles * ((float)width - 1) / 2;
+        float newPositionY = gapTiles * ((float)height - 1) / 2;
+        GameObject.Find("Main Camera").transform.position = new(newPositionX, -newPositionY, -10);
+    }
+
+    public void ResetGame(int difficulty)
+    {
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                tiles[line, column].ResetTile(difficulty);
+            }
+        }
+        isFlagSelect = false;
+        GameObject.Find("SceneController").GetComponent<SceneController>().DisableNewGamePanel();
+    }
+
+    public void DisableAllBoxColliders()
+    {
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                tiles[line, column].gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+    }
+    public void EnableAllBoxColliders()
+    {
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                tiles[line, column].gameObject.GetComponent<BoxCollider2D>().enabled = true;
             }
         }
     }
