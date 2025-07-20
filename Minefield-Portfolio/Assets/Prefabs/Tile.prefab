@@ -63,7 +63,8 @@ MonoBehaviour:
   revealed: 0
   visited: 0
   hasMine: 0
-  probabilityBomb: 25
+  marked: 0
+  probabilityBomb: 8.4
 --- !u!212 &8121222692617071679
 SpriteRenderer:
   m_ObjectHideFlags: 0

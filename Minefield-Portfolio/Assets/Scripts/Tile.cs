@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     public bool revealed;
     public bool visited;
     public bool hasMine;
+    public bool marked;
     [Range(0, 100)]
     public float probabilityBomb;
     private SpriteRenderer spriteRenderer;
@@ -20,6 +21,7 @@ public class Tile : MonoBehaviour
         revealed = false;
         visited = false;
         hasMine = false;
+        marked = false;
 
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -45,7 +47,7 @@ public class Tile : MonoBehaviour
         revealed = true;
     }
 
-    public void Mark()
+    private void Mark()
     {
         if (!revealed)
         {
@@ -54,17 +56,27 @@ public class Tile : MonoBehaviour
     }
 
     void OnMouseDown()
-    {
-        if (Input.GetMouseButtonDown(0))
+    { 
+        if (!field.isFlagSelect)
         {
-            Debug.Log($"Line: {line} | Column: {column}");
+            Debug.Log($"Line: {line} | Column: {column} | HasMine: {hasMine}");
             if (!revealed)
             {
-                field.VerifyAdjascenceFrom(line, column);
+                if (hasMine)
+                {
+                    // Revela a bomba
+                    // Chama o campo para revelar todas as bombas e determinar fim de jogo.
+                }
+                else
+                {
+                    revealed = true;
+                    field.SetAllTilesUnvisited();
+                    field.RevealTilesUponClick(line, column);
+                    // Show(field.VerifyAdjascenceFrom(line, column));
+                }
             }
-            
         }
-        else if (Input.GetMouseButtonDown(1))
+        else
         {
             Mark();
         }

@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af84e85bc8af1d499c84946e21b2b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 12
+  isFlagSelect: 0
+  width: 8
   height: 8
   gapTiles: 3
   tileGameObject: {fileID: 3953108286898410970, guid: bce6e8cbb4d14ee4d8569209293ee5fb, type: 3}
