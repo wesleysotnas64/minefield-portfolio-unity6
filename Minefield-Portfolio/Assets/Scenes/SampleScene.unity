@@ -520,6 +520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e572ac3dc16b5a344a140277b3791d77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameOver: 0
   countingTime: 0
   totalSeconds: 0
   flagCount: 0
@@ -530,7 +531,7 @@ MonoBehaviour:
   btnFlagImage: {fileID: 600032936}
   cursorTextures:
   - {fileID: 2800000, guid: b6c7bb44ebd51fd49b1feebac0e856bd, type: 3}
-  - {fileID: 2800000, guid: 2089518700d1d8a4f921890d46401764, type: 3}
+  - {fileID: 2800000, guid: 398d20390d916f94db769c6f8093f9de, type: 3}
   btnFlagSprites:
   - {fileID: 21300000, guid: 7e7b9366dc400f246aeb45d283d99306, type: 3}
   - {fileID: 21300000, guid: 0d32930629b0b544a89acf7310c2590c, type: 3}
