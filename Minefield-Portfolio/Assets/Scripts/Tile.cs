@@ -6,6 +6,9 @@ public class Tile : MonoBehaviour
     public int line;
     public int column;
     public List<Sprite> sprites;
+    public List<Sprite> numbersSprites;
+    private AudioSource audioSource;
+    public List<AudioClip> sounds;
     public bool revealed;
     public bool visited;
     public bool hasMine;
@@ -13,11 +16,14 @@ public class Tile : MonoBehaviour
     [Range(0, 100)]
     public float probabilityBomb;
     private SpriteRenderer spriteRenderer;
+    public SpriteRenderer numberSpriteRender;
     private Field field;
+    private SceneController sceneController;
 
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
+        sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
     }
 
     private void DrawBomb()
@@ -38,7 +44,7 @@ public class Tile : MonoBehaviour
 
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = sprites[9];
+        spriteRenderer.sprite = sprites[Random.Range(0, 5)];
 
         field = GameObject.Find("Field").GetComponent<Field>();
 
@@ -52,7 +58,8 @@ public class Tile : MonoBehaviour
         hasMine = false;
         markedWithFlag = false;
 
-        spriteRenderer.sprite = sprites[9];
+        spriteRenderer.sprite = sprites[Random.Range(0, 5)];
+        numberSpriteRender.sprite = null;
 
         switch (difficulty)
         {
@@ -61,11 +68,11 @@ public class Tile : MonoBehaviour
                 break;
 
             case 2:
-                probabilityBomb = 25.0f;
+                probabilityBomb = 17.0f;
                 break;
 
             case 3:
-                probabilityBomb = 65.0f;
+                probabilityBomb = 30.0f;
                 break;
 
             default:
@@ -77,7 +84,10 @@ public class Tile : MonoBehaviour
 
     public void Show(int adjacentQuantity)
     {
-        spriteRenderer.sprite = sprites[adjacentQuantity];
+        // numberSpriteRender.sprite = numbersSprites[adjacentQuantity-1];
+        spriteRenderer.sprite = sprites[Random.Range(5, 8)];
+        numberSpriteRender.sprite = adjacentQuantity == 0 ? null : numbersSprites[adjacentQuantity - 1];
+        numberSpriteRender.transform.localScale = new(2, 2, 2);
         revealed = true;
     }
 
@@ -86,7 +96,8 @@ public class Tile : MonoBehaviour
         if (!revealed)
         {
             markedWithFlag = true;
-            spriteRenderer.sprite = sprites[10];
+            numberSpriteRender.sprite = numbersSprites[8];
+            numberSpriteRender.transform.localScale = new(1, 1, 1);
         }
     }
 
@@ -95,7 +106,8 @@ public class Tile : MonoBehaviour
         if (!revealed)
         {
             markedWithFlag = false;
-            spriteRenderer.sprite = sprites[9];
+            numberSpriteRender.sprite = null;
+            numberSpriteRender.transform.localScale = new(2, 2, 2);
         }
     }
 
@@ -110,10 +122,15 @@ public class Tile : MonoBehaviour
             {
                 if (hasMine)
                 {
+                    sceneController.countingTime = false;
                     StartCoroutine(field.RevealAllBombsEnum());
                 }
                 else
                 {
+                    audioSource.clip = sounds[0];
+                    audioSource.pitch = 1;
+                    audioSource.Play();
+
                     revealed = true;
                     field.SetAllTilesUnvisited();
                     field.RevealTilesUponClick(line, column);
@@ -124,8 +141,22 @@ public class Tile : MonoBehaviour
         {
             if (!revealed)
             {
-                if (markedWithFlag) RemoveFlag();
-                else MarkWithFlag();
+                audioSource.clip = sounds[1];
+                audioSource.pitch = 3;
+
+                if (markedWithFlag)
+                {
+                    RemoveFlag();
+                    audioSource.Play();
+                    sceneController.RmvFlag();
+                }
+                else
+                {
+                    if (sceneController.flagCount <= 0) return;
+                    MarkWithFlag();
+                    audioSource.Play();
+                    sceneController.AddFlag();
+                }
             }
         }
     }

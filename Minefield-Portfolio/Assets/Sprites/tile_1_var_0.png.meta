@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6b2aef155c3e5804d9bc5648b7ee488c
+guid: a70521e3b501f4d4aacfed41d1659f3b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1122286935071471273
-    second: field_3_0
+      213: -4587373123106338986
+    second: tile_1_var_0_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -74,7 +74,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: field_3_0
+      name: tile_1_var_0_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
-        height: 256
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 759c00b8af5dc60f0800000000000000
-      internalID: -1122286935071471273
+      spriteID: 657821113706650c0800000000000000
+      internalID: -4587373123106338986
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tile_1_var_0_0: -4587373123106338986
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

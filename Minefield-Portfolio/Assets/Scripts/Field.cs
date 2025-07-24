@@ -7,15 +7,10 @@ public class Field : MonoBehaviour
     public int width;
     public int height;
     public float gapTiles;
+    public bool revealingMines;
     private Tile[,] tiles;
     public GameObject tileGameObject;
     public GameObject mineGameObject;
-
-    void Start()
-    {
-        InitSetUp();
-        ResetGame(1);
-    }
 
     private void InitAllTiles()
     {
@@ -35,6 +30,19 @@ public class Field : MonoBehaviour
                 tiles[line, column].InitSetUp();
             }
         }
+    }
+
+    public int CountAllMines()
+    {
+        int count = 0;
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                if (tiles[line, column].hasMine) count++;
+            }
+        }
+        return count;
     }
 
     public void RevealTilesUponClick(int line, int column)
@@ -61,6 +69,7 @@ public class Field : MonoBehaviour
 
     public IEnumerator RevealAllBombsEnum()
     {
+        revealingMines = true;
         DisableAllBoxColliders();
         for (int line = 0; line < height; line++)
         {
@@ -72,9 +81,10 @@ public class Field : MonoBehaviour
                     GameObject mineInstance = Instantiate(mineGameObject);
                     mineInstance.transform.position = tiles[line, column].transform.position;
                 }
-                
+
             }
         }
+        revealingMines = false;
     }
 
     public void DestroyAllMines()
@@ -104,7 +114,8 @@ public class Field : MonoBehaviour
         InitAllTiles();
 
         float newPositionX = gapTiles * ((float)width - 1) / 2;
-        float newPositionY = gapTiles * ((float)height - 1) / 2;
+        // float newPositionY = gapTiles * ((float)height - 1) / 2;
+        float newPositionY = 12.5f;
         GameObject.Find("Main Camera").transform.position = new(newPositionX, -newPositionY, -10);
     }
 
