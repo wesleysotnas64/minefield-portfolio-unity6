@@ -11,6 +11,12 @@ public class Field : MonoBehaviour
     private Tile[,] tiles;
     public GameObject tileGameObject;
     public GameObject mineGameObject;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void InitAllTiles()
     {
@@ -40,6 +46,19 @@ public class Field : MonoBehaviour
             for (int column = 0; column < width; column++)
             {
                 if (tiles[line, column].hasMine) count++;
+            }
+        }
+        return count;
+    }
+
+    public int CountAllRevealedTiles()
+    {
+        int count = 0;
+        for (int line = 0; line < height; line++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                if (tiles[line, column].revealed) count++;
             }
         }
         return count;
@@ -84,6 +103,7 @@ public class Field : MonoBehaviour
 
             }
         }
+        audioSource.Play();
         revealingMines = false;
     }
 

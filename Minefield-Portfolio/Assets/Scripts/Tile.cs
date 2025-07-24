@@ -123,7 +123,9 @@ public class Tile : MonoBehaviour
                 if (hasMine)
                 {
                     sceneController.countingTime = false;
+                    sceneController.GameOver(false);
                     StartCoroutine(field.RevealAllBombsEnum());
+
                 }
                 else
                 {
@@ -134,6 +136,8 @@ public class Tile : MonoBehaviour
                     revealed = true;
                     field.SetAllTilesUnvisited();
                     field.RevealTilesUponClick(line, column);
+
+                    sceneController.VerifyEndGame();
                 }
             }
         }
