@@ -1,6 +1,6 @@
-# 🧨 Minefeld
+# 🧨 Minefield
 
-**Minefeld** é uma versão clássica do tradicional *Campo Minado*, desenvolvida com Unity 6 como projeto de portfólio. O jogo mantém as mecânicas originais e é ideal para quem busca um desafio lógico rápido e direto.
+**Minefield** é uma versão clássica do tradicional *Campo Minado*, desenvolvida com Unity 6 como projeto de portfólio. O jogo mantém as mecânicas originais e é ideal para quem busca um desafio lógico rápido e direto.
 
 ## 🌐 Plataforma
 
